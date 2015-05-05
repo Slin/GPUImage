@@ -256,6 +256,8 @@ static void *openGLESContextQueueKey;
 
 + (BOOL)supportsFastTextureUpload;
 {
+	return NO;
+	
 #if TARGET_IPHONE_SIMULATOR
     return NO;
 #else
