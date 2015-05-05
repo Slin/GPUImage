@@ -304,6 +304,8 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size)
     [framebuffer restoreRenderTarget];
     [framebuffer unlock];
     [[GPUImageContext sharedFramebufferCache] removeFramebufferFromActiveImageCaptureList:framebuffer];
+	
+	[[GPUImageContext sharedFramebufferCache] purgeAllUnassignedFramebuffers];
 }
 
 - (CGImageRef)newCGImageFromFramebufferContents;
