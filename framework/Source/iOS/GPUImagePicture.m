@@ -76,7 +76,7 @@
     pixelSizeOfImage = CGSizeMake(widthOfImage, heightOfImage);
     CGSize pixelSizeToUseForTexture = pixelSizeOfImage;
     
-    BOOL shouldRedrawUsingCoreGraphics = NO;
+    BOOL shouldRedrawUsingCoreGraphics = YES;
     
     // For now, deal with images larger than the maximum texture size by resizing to be within that limit
     CGSize scaledImageSizeToFitOnGPU = [GPUImageContext sizeThatFitsWithinATextureForSize:pixelSizeOfImage];
