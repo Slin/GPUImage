@@ -645,7 +645,18 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
     {
         return;
     }
-    
+	
+	CGSize rotatedSize = [self rotatedSize:newSize forIndex:textureIndex];
+	
+	if (CGSizeEqualToSize(rotatedSize, CGSizeZero))
+	{
+		inputTextureSize = rotatedSize;
+	}
+	else if (!CGSizeEqualToSize(inputTextureSize, rotatedSize))
+	{
+		inputTextureSize = rotatedSize;
+	}
+	
     if (overrideInputSize)
     {
         if (CGSizeEqualToSize(forcedMaximumSize, CGSizeZero))
@@ -653,21 +664,9 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
         }
         else
         {
-            CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(newSize, CGRectMake(0.0, 0.0, forcedMaximumSize.width, forcedMaximumSize.height));
+			
+            CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputTextureSize, CGRectMake(0.0, 0.0, forcedMaximumSize.width, forcedMaximumSize.height));
             inputTextureSize = insetRect.size;
-        }
-    }
-    else
-    {
-        CGSize rotatedSize = [self rotatedSize:newSize forIndex:textureIndex];
-        
-        if (CGSizeEqualToSize(rotatedSize, CGSizeZero))
-        {
-            inputTextureSize = rotatedSize;
-        }
-        else if (!CGSizeEqualToSize(inputTextureSize, rotatedSize))
-        {
-            inputTextureSize = rotatedSize;
         }
     }
     
