@@ -45,6 +45,7 @@
 #import "GPUImageVignetteFilter.h"
 #import "GPUImageGaussianBlurFilter.h"
 #import "GPUImageGaussianBlurPositionFilter.h"
+#import "GPUImageSelectiveGaussianBlurFilter.h"
 #import "GPUImageGaussianSelectiveBlurFilter.h"
 #import "GPUImageOverlayBlendFilter.h"
 #import "GPUImageDarkenBlendFilter.h"
