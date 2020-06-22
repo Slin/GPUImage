@@ -25,6 +25,8 @@
 }
 
 @property (assign, nonatomic) NSUInteger aspectRatio;
+@property (nonatomic) CAEAGLLayer *eagLayer;
+@property (nonatomic) CGRect selfBounds;
 
 // Initialization and teardown
 - (void)commonInit;
@@ -79,6 +81,8 @@
 
 - (void)commonInit;
 {
+    _eagLayer = (CAEAGLLayer*)self.layer;
+    _selfBounds = self.bounds;
     // Set scaling to account for Retina display	
     if ([self respondsToSelector:@selector(setContentScaleFactor:)])
     {
@@ -136,6 +140,7 @@
     // The frame buffer needs to be trashed and re-created when the view size changes.
     if (!CGSizeEqualToSize(self.bounds.size, boundsSizeAtFrameBufferEpoch) &&
         !CGSizeEqualToSize(self.bounds.size, CGSizeZero)) {
+        _selfBounds = self.bounds;
         runSynchronouslyOnVideoProcessingQueue(^{
             [self destroyDisplayFramebuffer];
             [self createDisplayFramebuffer];
@@ -164,7 +169,7 @@
     glGenRenderbuffers(1, &displayRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, displayRenderbuffer);
 	
-    [[[GPUImageContext sharedImageProcessingContext] context] renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer];
+    [[[GPUImageContext sharedImageProcessingContext] context] renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eagLayer];
 	
     GLint backingWidth, backingHeight;
 
@@ -232,12 +237,11 @@
     runSynchronouslyOnVideoProcessingQueue(^{
         CGFloat heightScaling, widthScaling;
         
-        CGSize currentViewSize = self.bounds.size;
-        
+        CGSize currentViewSize = _selfBounds.size;
         //    CGFloat imageAspectRatio = inputImageSize.width / inputImageSize.height;
         //    CGFloat viewAspectRatio = currentViewSize.width / currentViewSize.height;
         
-        CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, self.bounds);
+        CGRect insetRect = AVMakeRectWithAspectRatioInsideRect(inputImageSize, _selfBounds);
         
         switch(_fillMode)
         {
